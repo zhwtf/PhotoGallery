@@ -25,6 +25,16 @@ public class FlickrFetchr {
 
     private static final String TAG = "FlickrFetchr";
     private static final String API_KEY = "10afabcf7a13b4dea51f2126d7139526";
+    private static final String FETCH_RECENTS_METHOD = "flickr.photos.getRecent";
+    private static final String SEARCH_METHOD = "flickr.photos.search";
+    private static final Uri ENDPOINT = Uri
+            .parse("https://api.flickr.com/services/rest/")
+            .buildUpon()
+            .appendQueryParameter("api_key", API_KEY)
+            .appendQueryParameter("format", "json")
+            .appendQueryParameter("nojsoncallback", "1")
+            .appendQueryParameter("extras", "url_s")
+            .build();
 
     // FlickrFetchr.java
     // 参数是 url 字符串，并且需要抛出 IO 错误
@@ -67,10 +77,26 @@ public class FlickrFetchr {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public List<GalleryItem> fetchItems() {
+
+    //添加方法用于下载和搜索
+    public List<GalleryItem> fetchRecentPhotos() {
+        String url = buildUrl(FETCH_RECENTS_METHOD, null);
+        return downloadGalleryItems(url);
+    }
+
+    public List<GalleryItem> searchPhotos(String query) {
+        String url = buildUrl(SEARCH_METHOD, query);
+        return downloadGalleryItems(url);
+    }
+
+
+
+    //public List<GalleryItem> fetchItems(){}
+    private List<GalleryItem> downloadGalleryItems(String url) {
         List<GalleryItem> items = new ArrayList<>();
 
         try {
+            /*
             String url = Uri.parse("https://api.flickr.com/services/rest/")
                     .buildUpon()
                     .appendQueryParameter("method", "flickr.photos.getRecent")
@@ -79,6 +105,7 @@ public class FlickrFetchr {
                     .appendQueryParameter("nojsoncallback", "1")
                     .appendQueryParameter("extras", "url_s")
                     .build().toString();
+                    */
             String jsonString = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonString);
 
@@ -106,6 +133,18 @@ JSONObject构造方法解析传入的Flickr JSON数据后，会生成与原始JS
          */
         return items;
     }
+
+    private String buildUrl(String method, String query) {
+        Uri.Builder uriBuidler = ENDPOINT.buildUpon().appendQueryParameter("method", method);
+
+        if (method.equals(SEARCH_METHOD)) {
+            uriBuidler.appendQueryParameter("text", query);
+        }
+
+        return uriBuidler.build().toString();
+    }
+
+
 
     /*
     写一个parseItems(...)方法，取出每张图片的信息，生成一个个GalleryItem对象，再将
