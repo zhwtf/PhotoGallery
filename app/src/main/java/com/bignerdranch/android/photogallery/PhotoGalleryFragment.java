@@ -9,10 +9,12 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,7 +47,8 @@ public class PhotoGalleryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        new FetchItemsTask().execute();
+        //new FetchItemsTask().execute();
+        updateItems();
 
         Handler responseHandler = new Handler();
 
@@ -94,6 +97,43 @@ public class PhotoGalleryFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
         menuInflater.inflate(R.menu.fragment_photo_gallery, menu);
+
+        //更新onCreateOptionsMenu(...)方法，实现一个SearchView.OnQueryTextListener监
+        //听方法
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Log.d(TAG, "QueryTextSubmit: " + s);
+                updateItems();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.d(TAG, "QueryTextChange: " + s);
+                return false;
+
+            }
+        });
+    }
+    /*
+        只要SearchView文本框里的文字有变化（甚至是每个字符的改变），onQueryTextChange
+(String)回调方法就会执行。在PhotoGallery应用中，这个回调方法除了记日志以外不会干其他
+任何事。
+用户提交搜索查询时，onQueryTextSubmit(String)回调方法就会执行。用户提交的搜索
+字符串会传给它。搜索请求受理后，该方法会返回true。这个方法也是启动FetchItemsTask搜
+索结果的地方。（现在FetchItemsTask里仍是一个硬编码的查询，我们稍后会更新这个方法以使
+用用户提交的查询请求。）
+updateItems()方法现在还没多大用。稍后，会有好几个地方要执行FetchItemsTask。
+updateItems()就是一个调用FetchItemsTask的封装方法。
+         */
+
+    private void updateItems() {
+        new FetchItemsTask().execute();
     }
 
     private void setupAdapter() {
