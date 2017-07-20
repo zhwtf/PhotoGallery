@@ -93,6 +93,9 @@ public class PhotoGalleryFragment extends Fragment {
         Log.i(TAG, "Background thread destroy");
     }
 
+
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater);
@@ -108,6 +111,7 @@ public class PhotoGalleryFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Log.d(TAG, "QueryTextSubmit: " + s);
+                QueryPreferences.setStoredQuery(getActivity(), s);
                 updateItems();
                 return true;
             }
@@ -117,6 +121,14 @@ public class PhotoGalleryFragment extends Fragment {
                 Log.d(TAG, "QueryTextChange: " + s);
                 return false;
 
+            }
+        });
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String query = QueryPreferences.getStoredQuery(getActivity());
+                searchView.setQuery(query, false);
             }
         });
     }
@@ -132,8 +144,28 @@ updateItems()方法现在还没多大用。稍后，会有好几个地方要执�
 updateItems()就是一个调用FetchItemsTask的封装方法。
          */
 
+    //清除查询信息
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_clear:
+                QueryPreferences.setStoredQuery(getActivity(), null);
+                updateItems();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /*
+    最后，别忘了更新FetchItemsTask，来使用保存的查询字符串（终于可以不用硬编码字符串
+了）。在FetchItemsTask中添加一个定制版构造方法，用于接收查询信息并保存在一个成员变量
+中备用。更新updateItems()方法，从shared preferences中取出保存的查询信息，用它创建一个
+FetchItemsTask新实例，
+     */
     private void updateItems() {
-        new FetchItemsTask().execute();
+        String query = QueryPreferences.getStoredQuery(getActivity());
+        new FetchItemsTask(query).execute();
     }
 
     private void setupAdapter() {
@@ -195,8 +227,8 @@ updateItems()就是一个调用FetchItemsTask的封装方法。
         public void onBindViewHolder(PhotoHolder photoHolder, int position) {
             GalleryItem galleryItem = mGalleryItems.get(position);
             //photoHolder.bindGalleryItem(galleryItem);
-            Drawable placeholder = getResources().getDrawable(R.drawable.bill_up_close);
-            photoHolder.bindDrawable(placeholder);
+            //Drawable placeholder = getResources().getDrawable(R.drawable.bill_up_close);
+            //photoHolder.bindDrawable(placeholder);
             mThumbnailDownloader.queueThumbnail(photoHolder, galleryItem.getUrl());
 
         }
@@ -210,6 +242,12 @@ updateItems()就是一个调用FetchItemsTask的封装方法。
 
 
     private class FetchItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
+        private String mQuery;
+
+        public FetchItemsTask(String query) {
+            mQuery = query;
+        }
+
         @Override
         protected List<GalleryItem> doInBackground(Void... params) {
             /*
@@ -222,12 +260,12 @@ updateItems()就是一个调用FetchItemsTask的封装方法。
             }
             */
             //return new FlickrFetchr().fetchItems();
-            String query = "robot"; // Just for testing
+            //String query = "robot"; // Just for testing
 
-            if (query == null) {
+            if (mQuery == null) {
                 return new FlickrFetchr().fetchRecentPhotos();
             } else {
-                return new FlickrFetchr().searchPhotos(query);
+                return new FlickrFetchr().searchPhotos(mQuery);
             }
 
         }
