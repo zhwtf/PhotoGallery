@@ -1,9 +1,12 @@
 package com.bignerdranch.android.photogallery;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.List;
@@ -15,9 +18,42 @@ import java.util.List;
 public class PollService extends IntentService {
     private static final String TAG = "PollService:";
 
+    private static final int POLL_INTERVAL = 1000 * 60; // 60 seconds
+
     public static Intent newIntent(Context context) {
         return new Intent(context, PollService.class);
     }
+
+    public static void setServiceAlarm(Context context, boolean isOn) {
+        /*
+        AlarmManager是可以发送Intent的系统服务
+
+        如何将要发送的intent告诉AlarmManager呢？使用PendingIntent。使用PendingIntent打
+包一个intent：“我想启动PollService服务。”然后，将其发送给系统中的其他部件，如
+AlarmManager。
+         */
+
+        Intent i = PollService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        if (isOn) {
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime(), POLL_INTERVAL, pi);
+
+        } else {
+            alarmManager.cancel(pi);
+            pi.cancel();
+        }
+    }
+
+    public static boolean isServiceAlarmOn(Context context) {
+        Intent i = PollService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_NO_CREATE);
+        return pi != null;
+    }
+
 
     public PollService() {
         super(TAG);
