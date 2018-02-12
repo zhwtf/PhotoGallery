@@ -66,7 +66,7 @@ Downloader后台线程上管理下载请求消息队列。这个Handler也负责
 
     @Override
     protected void onLooperPrepared() {
-        mRequestHandler = new Handler() {
+        mRequestHandler = new Handler(getLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == MESSAGE_DOWNLOAD) {
