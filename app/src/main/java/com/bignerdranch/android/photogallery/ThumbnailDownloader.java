@@ -52,6 +52,18 @@ Downloader后台线程上管理下载请求消息队列。这个Handler也负责
 
     }
 
+
+    public void queueThumbnail(T target, String url) {
+        // the target is photoholder in this case, not the handler
+        // photoholer is the object in the Message
+        if (url == null) {
+            mRequestMap.remove(target);
+        }else {
+            mRequestMap.put(target, url);
+            mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, target).sendToTarget();
+        }
+    }
+
     @Override
     protected void onLooperPrepared() {
         mRequestHandler = new Handler() {
@@ -72,16 +84,7 @@ Downloader后台线程上管理下载请求消息队列。这个Handler也负责
         return super.quit();
     }
 
-    public void queueThumbnail(T target, String url) {
-        Log.i(TAG, "Got a URL: " + url);
 
-        if (url == null) {
-            mRequestMap.remove(target);
-        } else {
-            mRequestMap.put(target, url);
-            mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, target).sendToTarget();
-        }
-    }
 
     public void clearQueue() {
         mRequestHandler.removeMessages(MESSAGE_DOWNLOAD);
