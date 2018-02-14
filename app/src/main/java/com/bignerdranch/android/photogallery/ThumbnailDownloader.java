@@ -60,6 +60,7 @@ Downloader后台线程上管理下载请求消息队列。这个Handler也负责
             mRequestMap.remove(target);
         }else {
             mRequestMap.put(target, url);
+            // sendToTarget will connect the message to the handler
             mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, target).sendToTarget();
         }
     }
