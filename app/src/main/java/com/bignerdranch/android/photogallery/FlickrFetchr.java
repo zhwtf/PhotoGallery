@@ -165,6 +165,7 @@ JSONObject构造方法解析传入的Flickr JSON数据后，会生成与原始JS
                 continue;
             }
             item.setUrl(photoJsonObject.getString("url_s"));
+            item.setOwner(photoJsonObject.getString("owner"));
             items.add(item);
         }
     }
