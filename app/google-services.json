@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "965988117991",
+    "firebase_url": "https://wepic-86dbc.firebaseio.com",
+    "project_id": "wepic-86dbc",
+    "storage_bucket": "wepic-86dbc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965988117991:android:e841293f5aeb9cf7",
+        "android_client_info": {
+          "package_name": "com.bignerdranch.android.photogallery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "965988117991-eg7tj32t6rnf6i08s70a3hlurbkp7o7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bignerdranch.android.photogallery",
+            "certificate_hash": "d1213bf3a310b25ec6b9d5b89d292a8f9380ee12"
+          }
+        },
+        {
+          "client_id": "965988117991-ondlgfrtpbopdt9s10ri647tv1h28rb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjYoYhhexVO7SNkdCtDcodP55yxnHrMdE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "965988117991-ondlgfrtpbopdt9s10ri647tv1h28rb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
