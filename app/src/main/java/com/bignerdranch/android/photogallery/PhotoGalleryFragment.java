@@ -165,6 +165,11 @@ updateItems()就是一个调用FetchItemsTask的封装方法。
                 QueryPreferences.setStoredQuery(getActivity(), null);
                 updateItems();
                 return true;
+            case R.id.menu_item_chat:
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                return true;
+
             case R.id.menu_item_toggle_polling:
                 boolean shouldStartAlarm = !PollService.isServiceAlarmOn(getActivity());
                 PollService.setServiceAlarm(getActivity(), shouldStartAlarm);
