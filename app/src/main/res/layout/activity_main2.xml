@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<fragment
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/master_list_fragment"
+    android:name="com.bignerdranch.android.photogallery.game.MasterListFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.bignerdranch.android.photogallery.game.Main2Activity">
-
-</android.support.constraint.ConstraintLayout>
+    android:layout_height="match_parent" />
