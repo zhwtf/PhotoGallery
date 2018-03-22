@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bignerdranch.android.photogallery">
+          package="com.bignerdranch.android.photogallery">
 
-    <permission android:name="com.bignerdranch.android.photogallery.PRIVATE"
-                android:protectionLevel="signature"/>
-
+    <permission
+        android:name="com.bignerdranch.android.photogallery.PRIVATE"
+        android:protectionLevel="signature"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="com.bignerdranch.android.photogallery.PRIVATE"/>
 
     <application
@@ -20,14 +20,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".PhotoGalleryActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".PhotoPageActivity"/>
-
         <activity android:name=".MainActivity"/>
 
         <service android:name=".PollService"/>
@@ -35,18 +33,18 @@
         <receiver android:name=".StartupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
-
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".NotificationReceiver"
-                  android:exported="false">
+        <receiver
+            android:name=".NotificationReceiver"
+            android:exported="false">
             <intent-filter android:priority="-999">
-                <action
-                    android:name="com.bignerdranch.android.photogallery.SHOW_NOTIFICATION"/>
+                <action android:name="com.bignerdranch.android.photogallery.SHOW_NOTIFICATION"/>
             </intent-filter>
         </receiver>
 
+        <activity android:name=".game.Main2Activity">
+        </activity>
     </application>
 
 </manifest>
